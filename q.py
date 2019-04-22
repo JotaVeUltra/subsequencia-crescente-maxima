@@ -11,10 +11,28 @@ def guloso(sequencia):
     return subsequencia
 
 
-# Tentativa de fazer dinamico
-# Melhor que a função gulosa
-# Não garante o ótimo
-# Falha em [4,5,1,2,3]
+'''
+SSCTF-Max-Rec (A, n)
+    c ← 1
+    para  i ← n−1  decrescendo até 1  faça
+        se  A[i] ≤ A[n]
+            então  d ← SSCTF-Max-Rec (A, i)
+                se  d+1 > c  então  c ← d+1
+    devolva  c
+'''
+
+
+def recursiva(sequencia, n):
+    c = 1
+    for i in list(range(n - 1))[::-1]:
+        if sequencia[i] <= sequencia[n]:
+            d = recursiva(sequencia, i)
+            if d + 1 > c:
+                c = d + 1
+    return c
+
+
+# TODO mentir no relatório que primeiro acho o tamanho da sequencia e depois conseguiu a sequencia
 def dinamico(sequencia):
     subsequencia = [float('inf')]
     for valor in sequencia:
@@ -29,16 +47,6 @@ def dinamico(sequencia):
     return subsequencia
 
 
-def recursivo(sequencia):
-    subsequencia = []
-    for i in range(len(sequencia)):
-        if len(dinamico(sequencia[i:])) > len(subsequencia):
-            subsequencia = dinamico(sequencia[i:])
-    return subsequencia
-
-# solução
-# para cada
-
 sequencia_aleatoria = list(range(1, 21))
 shuffle(sequencia_aleatoria)
 
@@ -52,33 +60,5 @@ print()
 
 print('dinamico')
 print(dinamico(sequencia_aleatoria))
-print()
-print([4, 5, 1, 2, 3])
-print('ótimo [1, 2, 3]')
-print(dinamico([4, 5, 1, 2, 3]))
-print()
 
-print('recursivo')
-print(recursivo(sequencia_aleatoria))
-print(recursivo([4, 5, 1, 2, 3]))
-
-print()
-a = [19, 1, 17, 18, 2, 15, 16, 3, 13, 14, 4]
-print(guloso(a))
-print(dinamico(a))
-print(recursivo(a))
-
-
-cache_otimo = [list() for i in sequencia_aleatoria]
-def otimo(sequencia):
-    for index, item in enumerate(sequencia):
-        if cache_otimo[index] != []:
-
-
-
-    #para cada valor na sequencia:
-    #    para todo os valores conseguintes maires que o valor
-    #        o = otimo(seg_sequencia)
-
-
-
+# print(recursiva(sequencia_aleatoria, len(sequencia_aleatoria)))

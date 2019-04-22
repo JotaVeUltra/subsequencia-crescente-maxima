@@ -1,0 +1,18 @@
+Primeiro foi necessario entender o problema que é simples
+
+Após compreendido o problema foi pensado em tecnicas de algoritmos aprendidos em aula para resolver este problema
+
+Vou iniciar a resolução usando a tecnica de algoritmo guloso
+Ou seja
+Irei percorrer toda a sequencia uma unica vez e buscar os primeiros valores que se encaixarem como uma subsequencia.
+
+Para este problema o algoritmo guloso não garante um resultado ótimo
+
+Portanto tentarei utilizar a tecnica de programação dinamica para tentar resolver-lo
+
+para cada segmento aumentando
+
+ver se o proximo numero adicionado é menor que o umltimo numero da atual sequencia maximal
+se sim substitui e não aumenta um numero
+caso contrario
+aumenta o contador do numero e atualiza o valor maximo
