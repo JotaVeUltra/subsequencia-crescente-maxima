@@ -70,9 +70,9 @@ print(recursivo(a))
 
 
 cache_otimo = [list() for i in sequencia_aleatoria]
-def otimo(sequencia):
-    for index, item in enumerate(sequencia):
-        if cache_otimo[index] != []:
+# def otimo(sequencia):
+    # for index, item in enumerate(sequencia):
+        # if cache_otimo[index] != []:
 
 
 
@@ -80,5 +80,29 @@ def otimo(sequencia):
     #    para todo os valores conseguintes maires que o valor
     #        o = otimo(seg_sequencia)
 
+sequencia_aleatoria = a
+
+# global sequencia_aleatoria
+
+cache_otimo = dict()
+def otimo(indice):
+    if indice in cache_otimo.keys():
+        return cache_otimo[indice]
+    print(indice)
+    valor_no_indice = sequencia_aleatoria[indice]
+    subsequencia = []
+    maior = float('inf')
+    if indice < len(sequencia_aleatoria):
+        for indice_proximo, proximo in enumerate(sequencia_aleatoria[indice+1:], start=indice+1):
+            if proximo < maior and proximo >= valor_no_indice:
+                maior = proximo
+                subsequencia = max([subsequencia, otimo(indice_proximo)], key= lambda x: len(x))
+    cache_otimo[indice] = [valor_no_indice] + subsequencia
+    return cache_otimo[indice]
 
 
+o = []
+for index in range(len(sequencia_aleatoria)):
+    otimo(index)
+
+print(max(cache_otimo.values(), key= lambda x: len(x)))
