@@ -59,6 +59,23 @@ def otimo(indice):
     return cache_otimo[indice]
 
 
+# segunda iteração
+# simplificada
+# busca o resultado ótimo percorrendo a sequencia em ordem inversa
+def otimo2(sequencia):
+    otimos = dict()
+    n = len(sequencia) - 1
+    while n >= 0:
+        valor = sequencia[n]
+        subsequencia = [valor]
+        for subsequencia_parcial in otimos.values():
+            if valor < subsequencia_parcial[0]:
+                subsequencia = max([subsequencia, [valor] + subsequencia_parcial], key=lambda x: len(x))
+        otimos[n] = subsequencia
+        n -= 1
+    return max(otimos.values(), key=lambda x: len(x))
+
+
 sequencia_aleatoria = list(range(1, 21))
 shuffle(sequencia_aleatoria)
 
@@ -85,6 +102,10 @@ for index in range(len(sequencia_aleatoria)):
 print(max(cache_otimo.values(), key=lambda x: len(x)))
 print()
 
+print('otimo2')
+print(otimo2(sequencia_aleatoria))
+print()
+
 sequencia_aleatoria = [19, 1, 17, 18, 2, 15, 16, 3, 13, 14, 4]
 print(guloso(sequencia_aleatoria))
 print(dinamico(sequencia_aleatoria))
@@ -93,3 +114,4 @@ cache_otimo = dict()
 for index in range(len(sequencia_aleatoria)):
     otimo(index)
 print(max(cache_otimo.values(), key=lambda x: len(x)))
+print(otimo2(sequencia_aleatoria))
