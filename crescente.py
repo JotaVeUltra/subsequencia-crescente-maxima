@@ -11,13 +11,13 @@ def guloso(sequencia):
     return subsequencia
 
 
-# Tentativa de fazer dinamico
+# Tentativa de usar programação dinamica
 # Melhor que a função gulosa
 # Não garante o ótimo
 # Falha com [4,5,1,2,3]
 # Retorna [4,5]
 # Ótimo [1,2,3]
-def dinamico(sequencia):
+def nao_otimo_1(sequencia):
     subsequencia = [float('inf')]
     for valor in sequencia:
         if valor >= subsequencia[-1]:
@@ -34,35 +34,40 @@ def dinamico(sequencia):
 # Melhor que o anterior
 # Ainda não garante o ótimo
 # Falha com [19, 1, 17, 18, 2, 15, 16, 3, 13, 14, 4]
-def dinamico2(sequencia):
+def nao_otimo_2(sequencia):
     subsequencia = []
     for i in range(len(sequencia)):
-        if len(dinamico(sequencia[i:])) > len(subsequencia):
-            subsequencia = dinamico(sequencia[i:])
+        if len(nao_otimo_1(sequencia[i:])) > len(subsequencia):
+            subsequencia = nao_otimo_1(sequencia[i:])
     return subsequencia
 
 
 # Garante o ótimo
 # Usa memoização
-def otimo(indice):
-    if indice in cache_otimo.keys():
+def otimo_1(sequencia):
+    def subf_f(indice):
+        if indice in cache_otimo.keys():
+            return cache_otimo[indice]
+        valor_no_indice = sequencia[indice]
+        subsequencia = []
+        maior = float('inf')
+        if indice < len(sequencia):
+            for indice_proximo, proximo in enumerate(sequencia[indice + 1:], start=indice + 1):
+                if maior > proximo >= valor_no_indice:
+                    maior = proximo
+                    subsequencia = max([subsequencia, subf_f(indice_proximo)], key=lambda x: len(x))
+        cache_otimo[indice] = [valor_no_indice] + subsequencia
         return cache_otimo[indice]
-    valor_no_indice = sequencia_aleatoria[indice]
-    subsequencia = []
-    maior = float('inf')
-    if indice < len(sequencia_aleatoria):
-        for indice_proximo, proximo in enumerate(sequencia_aleatoria[indice + 1:], start=indice + 1):
-            if maior > proximo >= valor_no_indice:
-                maior = proximo
-                subsequencia = max([subsequencia, otimo(indice_proximo)], key=lambda x: len(x))
-    cache_otimo[indice] = [valor_no_indice] + subsequencia
-    return cache_otimo[indice]
+    cache_otimo = dict()
+    for index in range(len(sequencia)):
+        subf_f(index)
+    return max(cache_otimo.values(), key=lambda x: len(x))
 
 
 # segunda iteração
 # simplificada
-# busca o resultado ótimo percorrendo a sequencia em ordem inversa
-def otimo2(sequencia):
+# busca o resultado ótimo percorrendo a sequência em ordem inversa e obtem o ótimo para todos os indices
+def otimo_2(sequencia):
     otimos = dict()
     n = len(sequencia) - 1
     while n >= 0:
@@ -87,31 +92,25 @@ print('guloso')
 print(guloso(sequencia_aleatoria))
 print()
 
-print('dinamico')
-print(dinamico(sequencia_aleatoria))
+print('nao_otimo_1')
+print(nao_otimo_1(sequencia_aleatoria))
 print()
 
-print('dinamico2')
-print(dinamico2(sequencia_aleatoria))
+print('nao_otimo_2')
+print(nao_otimo_2(sequencia_aleatoria))
 print()
 
-print('otimo')
-cache_otimo = dict()
-for index in range(len(sequencia_aleatoria)):
-    otimo(index)
-print(max(cache_otimo.values(), key=lambda x: len(x)))
+print('otimo_1')
+print(otimo_1(sequencia_aleatoria))
 print()
 
-print('otimo2')
-print(otimo2(sequencia_aleatoria))
+print('otimo_2')
+print(otimo_2(sequencia_aleatoria))
 print()
 
-sequencia_aleatoria = [19, 1, 17, 18, 2, 15, 16, 3, 13, 14, 4]
-print(guloso(sequencia_aleatoria))
-print(dinamico(sequencia_aleatoria))
-print(dinamico2(sequencia_aleatoria))
-cache_otimo = dict()
-for index in range(len(sequencia_aleatoria)):
-    otimo(index)
-print(max(cache_otimo.values(), key=lambda x: len(x)))
-print(otimo2(sequencia_aleatoria))
+sequencia_fixa = [19, 1, 17, 18, 2, 15, 16, 3, 13, 14, 4]
+print(guloso(sequencia_fixa))
+print(nao_otimo_1(sequencia_fixa))
+print(nao_otimo_2(sequencia_fixa))
+print(otimo_1(sequencia_fixa))
+print(otimo_2(sequencia_fixa))
